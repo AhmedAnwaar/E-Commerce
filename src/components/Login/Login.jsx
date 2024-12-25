@@ -8,6 +8,7 @@ import LoadingScreen from '../LoadingScreen/LoadingScreen'
 import {  toast } from 'react-toastify';
 import * as Yup from "yup"
 import { userContext } from '../../Context/UserContext'
+import { jwtDecode } from 'jwt-decode'
 
 export default function Login() {
 
@@ -26,8 +27,10 @@ export default function Login() {
       setemail(data.data.user.email)
       setToken(data.data.token);
       localStorage.setItem("token", data.data.token);
+      const decoded = jwtDecode(localStorage.getItem("token"));
       localStorage.setItem("name", data.data.user.name);
       localStorage.setItem("email", data.data.user.email);
+      localStorage.setItem("Userid",decoded.id);
     },
     onError: (error) => {
       // Handle error case and show a toast message

@@ -1,14 +1,18 @@
+
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import LoadingScreen from '../LoadingScreen/LoadingScreen';
 import ServerError from '../ServerError/ServerError';
 import { Helmet } from 'react-helmet';
-
+import { jwtDecode } from 'jwt-decode';
 
 export default function AllOrders() {
     let  userId  = localStorage.getItem("Userid");
   function getUserOrders(userId) {
-    return axios.get(`https://ecommerce.routemisr.com/api/v1/orders/user/${userId}`)}
+    const decoded = jwtDecode(localStorage.getItem("token"));
+    return axios.get(`https://ecommerce.routemisr.com/api/v1/orders/user/${decoded?.id || userId }`);
+  }
+
 
   // Fetch data from API
   let { data, isError, isLoading } = useQuery({
@@ -27,7 +31,7 @@ export default function AllOrders() {
     return String(name).charAt(0).toUpperCase() + String(name).slice(1);
 }
   return <>
-   <Helmet><title>AllOrders</title></Helmet>
+  <Helmet> <title>All Order</title></Helmet>
 <div className="bg-[url('/src/assets/light-patten.svg')] bg-center flex-1 mt-16">
   <main className="container px-4 mx-auto overflow-hidden">
     <section className="xl:mx-24 px-2 py-12">
